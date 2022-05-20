@@ -11,17 +11,40 @@
 <body>
     <div id="container">
         <div id="calc-wrapper">
-            <div id="col-display" class="col">
+            <div id="display-wrapper" class="col">
                 <div id="display">
                     <div class="readout results"></div>
                     <div class="readout input"></div>
                 </div>
             </div>
-            <div id="col-buttons" class="col">
-                <div id="buttons-row-1">
-                    <button id="button-delete" class="button special"></button>
-                    <button id="button-clear" class="button special large"></button>
-                    <button id="button-+" class="button operator"></button>
+            <div id="buttons-wrapper" class="col">
+                <div id="buttons-row-1" class="col row">
+                    <button id="delete" class="button special"></button>
+                    <button id="clear" class="button special large"></button>
+                    <button id="+" class="button operator"></button>
+                </div>
+                <div id="buttons-row-2" class="col row">
+                    <button id="7" class="button numeric"></button>
+                    <button id="8" class="button numeric"></button>
+                    <button id="9" class="button numeric"></button>
+                    <button id="-" class="button operator"></button>
+                </div>
+                <div id="buttons-row-3" class="col row">
+                    <button id="4" class="button numeric"></button>
+                    <button id="5" class="button numeric"></button>
+                    <button id="6" class="button numeric"></button>
+                    <button id="*" class="button operator"></button>
+                </div>
+                <div id="buttons-row-4" class="col row">
+                    <button id="1" class="button numeric"></button>
+                    <button id="2" class="button numeric"></button>
+                    <button id="3" class="button numeric"></button>
+                    <button id="/" class="button operator"></button>
+                </div>
+                <div id="buttons-row-5" class="col row">
+                    <button id="." class="button numeric"></button>
+                    <button id="0" class="button numeric"></button>
+                    <button id="enter" class="button special large"></button>
                 </div>
             </div>
         </div>

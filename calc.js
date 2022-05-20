@@ -16,6 +16,6 @@ function createButtons() {
 
 function assignButtonText(buttons) {
     buttons.forEach(element => {
-        console.log(element.id);
+        element.textContent = `${element.id}`;
     });
 }
