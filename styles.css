@@ -1,1 +1,59 @@
 /* CSS styling for calculator */
+body {
+    width: 100%;
+    background-color: lightgray;
+}
+
+#container {
+    display: flex;
+    width: inherit;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#calc-wrapper {
+    width: 640px;
+    margin: 50px;
+    background-color: lightblue;
+    border: 3px black solid;
+    border-radius: 15px;
+}
+
+#display {
+    width: 80%;
+    margin: 25px;
+    align-self: center;
+    height: 75px;
+    background-color: white;;
+    border: 2px black solid;
+    border-radius: 5px;
+    text-align: right;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#col-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#col-buttons {
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#display .results {
+    margin: 5px;
+    color: darkred;
+    font-size: 1.75em;
+}
+
+#display .input {
+    margin: 10px;
+    color:darkslateblue;
+    font-size: 1.25em;
+}
