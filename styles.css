@@ -1,4 +1,11 @@
 /* CSS styling for calculator */
+@keyframes example {
+    from {background-color: black;
+    color: white}
+    to {background-color: white;
+    color: black;}
+  }
+
 body {
     width: 100%;
     background-color: lightgray;
@@ -13,8 +20,8 @@ body {
 }
 
 #calc-wrapper {
-    width: 640px;
-    margin: 50px;
+    width: 500px;
+    margin: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,7 +42,7 @@ body {
 #display {
     width: inherit;
     margin: 25px;
-    height: 75px;
+    height: 100px;
     background-color: white;;
     border: 2px black solid;
     border-radius: 5px;
@@ -44,19 +51,19 @@ body {
 }
 
 #display .results {
-    margin: 5px;
+    height: 50px;
     color: darkred;
     font-size: 1.75em;
 }
 
 #display .input {
+    height: 25px;
     margin: 10px;
     color:darkslateblue;
     font-size: 1.25em;
 }
 
 #buttons-wrapper {
-    border: 1px red solid;
     width: inherit;
     display: flex;
     flex-direction: row;
@@ -83,11 +90,21 @@ body {
     margin: 10px;
     font-family:'Times New Roman', Times, serif;
     font-size: 1.5em;
-    text-transform: capitalize;
+    text-transform: uppercase;
     border: 1px black solid;
     border-radius: 10px;
 }
 
 .large {
     width: 170px;
+}
+
+button:active {
+    animation-name: example;
+    animation-duration: 0.05s;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
 }
