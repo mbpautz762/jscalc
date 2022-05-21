@@ -36,6 +36,14 @@ function buildExpression(input, e) {
 
 
 function evalExpression(input) {
+const operands = input.split(/([*+-/])/);
+
+for (let i = 0; i < operands.length; i++) {
+    if (!(/[+*-/]/.test(operands[i]))) {
+        operands[i] = parseInt(operands[i]);
+    }
+}
+    console.log(operands);
     return input.concat(" = (evaluated)");
 
 }
