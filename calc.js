@@ -7,7 +7,8 @@ input.textContent = "0";
 
 let buttons = createButtons();
 let expressionObj = 
-    {"l_operand" : "",
+    {"exp" : "",
+    "l_operand" : "",
     "operator" : "",
     "r_operand" : "",
     "active" : "none",
@@ -39,10 +40,14 @@ function createButtons() {
                 else {
                     // if user inputs new operator and there is already a right operand,
                     // auto evaluate the expression and reset expression w/ result stored in l_operand
-                    if (expressionObj.r_operand !== "") {
-                        evaluateExpression();
-                        expressionObj.l_operand = expressionObj.result;
+                    if (expressionObj.active === "o") {
                         expressionObj.operator = e.target.id;
+                    }
+                    
+                    else {
+                        evaluateExpression();
+                        expressionObj.operator = e.target.id;
+
                     }
                 }
                 expressionObj.active = "o";
@@ -59,6 +64,8 @@ function createButtons() {
                     case "del":
                         deleteLast();
                         break;
+                    case "enter":
+                        evaluateExpression();
                 
                     default:
                         break;
@@ -76,6 +83,7 @@ function evaluateExpression() {
     // first, convert to numbers
     let left = parseInt(expressionObj.l_operand);
     let right = parseInt(expressionObj.r_operand);
+    let divError = false;
     switch (expressionObj.operator) {
         case "+":
             expressionObj.result = left + right;
@@ -87,14 +95,21 @@ function evaluateExpression() {
             expressionObj.result = left * right;
             break;
         case "/":
-            if (right === 0) expressionObj.result = "Don't div by 0!";
+            if (right === 0) {
+                expressionObj.result = "Don't div by 0!";
+                divError = true;
+            }
             else expressionObj.result = left / right;
     
         default:
             break;
     }
     results.textContent = expressionObj.result;
-    resetExpression();
+    if (!divError) {
+        resetExpression();
+        expressionObj.l_operand = expressionObj.result;
+    }
+    else divError = false;
 }
 
 function resetExpression() {
@@ -112,6 +127,8 @@ function deleteLast() {
             break;
         case "l":
             expressionObj.l_operand = expressionObj.l_operand.slice(0, -1);
+            if (expressionObj.l_operand === "") expressionObj.active = "none";
+
             break;
         case "o":
             expressionObj.operator = "";
@@ -119,7 +136,7 @@ function deleteLast() {
             break;
         case "r":
             expressionObj.r_operand = expressionObj.r_operand.slice(0, -1);
-            if (expressionObj.l_operand == "") expressionObj.active = "o";
+            if (expressionObj.r_operand === "") expressionObj.active = "o";
 
             break;        
     
