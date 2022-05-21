@@ -6,16 +6,20 @@ let input = document.querySelector("#display .input");
 input.textContent = "0";
 
 let buttons = createButtons();
+
+// the calc stores everything it needs in the expression object as opposed to simply converting a full string of 
+// input.  This is done in order to allow auto evaluation when the user inputs a chain of commands.  It's a clunky way to
+// do it, but it works as intended.
+
 let expressionObj = 
-    {"exp" : "",
-    "l_operand" : "",
+    {"l_operand" : "",
     "operator" : "",
     "r_operand" : "",
     "active" : "none",
     "result" : "",
     "fraction" : false};
 
-
+// buttons are created and content assigned based on the id of the button.
 function createButtons() {
     let list = document.querySelectorAll(".button");
     const buttons = Array.from(list);
@@ -24,17 +28,17 @@ function createButtons() {
         element.addEventListener("click", (e) => {
             if (e.target.classList.contains("numeric")) {
                 // if there is no current left and/or operand, store it
-                if (expressionObj.operator === "") {
+                if (!expressionObj.operator) {
                     expressionObj.l_operand += e.target.id;
                     expressionObj.active = "l";
                 }
-                else if (expressionObj.operator !== "") {
+                else {
                     expressionObj.r_operand += e.target.id;
                     expressionObj.active = "r";
                 }
             }
             if (e.target.classList.contains("operator")) {
-                if (expressionObj.operator === "") {
+                if (!expressionObj.operator) {
                     expressionObj.operator = e.target.id;
                 }
                 else {
@@ -80,7 +84,7 @@ function createButtons() {
 }
 
 function evaluateExpression() {
-    // first, convert to numbers
+    // first, convert everything to actual numbers
     let left = parseInt(expressionObj.l_operand);
     let right = parseInt(expressionObj.r_operand);
     let divError = false;
@@ -97,6 +101,7 @@ function evaluateExpression() {
         case "/":
             if (right === 0) {
                 expressionObj.result = "Don't div by 0!";
+                // divError prevents error text from being copied to l_operand after eval
                 divError = true;
             }
             else expressionObj.result = left / right;
@@ -107,7 +112,8 @@ function evaluateExpression() {
     results.textContent = expressionObj.result;
     if (!divError) {
         resetExpression();
-        expressionObj.l_operand = expressionObj.result;
+        expressionObj.l_operand = expressionObj.result.toString();
+        expressionObj.active = "l";
     }
     else divError = false;
 }
@@ -127,7 +133,7 @@ function deleteLast() {
             break;
         case "l":
             expressionObj.l_operand = expressionObj.l_operand.slice(0, -1);
-            if (expressionObj.l_operand === "") expressionObj.active = "none";
+            if (!expressionObj.l_operand) expressionObj.active = "none";
 
             break;
         case "o":
@@ -136,7 +142,7 @@ function deleteLast() {
             break;
         case "r":
             expressionObj.r_operand = expressionObj.r_operand.slice(0, -1);
-            if (expressionObj.r_operand === "") expressionObj.active = "o";
+            if (!expressionObj.r_operand) expressionObj.active = "o";
 
             break;        
     
@@ -145,25 +151,4 @@ function deleteLast() {
     }
 }
 
-
-// function buildExpression(input, e) {
-//     // if (e.target.id === "enter") return input;
-//     if (e.target.id === "del") return input.slice(0, -1);
-    
-//     return input.concat(e.target.id);
-// }
-
-
-// function evalExpression(input) {
-// const operands = input.split(/([*+-/])/);
-
-// for (let i = 0; i < operands.length; i++) {
-//     if (!(/[+*-/]/.test(operands[i]))) {
-//         operands[i] = parseInt(operands[i]);
-//     }
-// }
-//     console.log(operands);
-//     return input.concat(" = (evaluated)");
-
-// }
 
