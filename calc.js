@@ -17,7 +17,7 @@ let expressionObj =
     "r_operand" : "",
     "active" : "none",
     "result" : "",
-    "fraction" : false};
+    "precision" : 0};
 
 // buttons are created and content assigned based on the id of the button.
 function createButtons() {
@@ -70,23 +70,38 @@ function createButtons() {
                         break;
                     case "enter":
                         evaluateExpression();
+                        break;
+                    case ".":
+                        // only add the decimal if it doesn't already exist in the operand
+                        if (expressionObj.active === "l" && !(expressionObj.l_operand.includes("."))) {
+                            expressionObj.l_operand += e.target.id;
+                        }
+                        else if (expressionObj.active === "r" && !(expressionObj.r_operand.includes("."))) {
+                            expressionObj.r_operand += e.target.id;
+                        }
+                        break;
                 
                     default:
                         break;
                 }
             }
-            // now set the proper display(s)
+            // now set the content for the proper display(s)
             input.textContent = expressionObj.l_operand + " " + expressionObj.operator + " " + expressionObj.r_operand;
             results.textContent = expressionObj.result;
-            console.log(expressionObj);
+            // console.log(expressionObj);
         });
     });
 }
 
 function evaluateExpression() {
-    // first, convert everything to actual numbers
-    let left = parseInt(expressionObj.l_operand);
-    let right = parseInt(expressionObj.r_operand);
+    // first, convert everything to actual numbers, checking if there is a decimal in there
+
+    let left = expressionObj.l_operand.includes(".") ? parseFloat(expressionObj.l_operand) : parseInt(expressionObj.l_operand);
+    let right = expressionObj.r_operand.includes(".") ? parseFloat(expressionObj.r_operand) : parseInt(expressionObj.r_operand);
+    console.log(`Left: ${left}.  Right: ${right}`);
+
+    // let left = parseInt(expressionObj.l_operand);
+    // let right = parseInt(expressionObj.r_operand);
     let divError = false;
     switch (expressionObj.operator) {
         case "+":
@@ -101,7 +116,7 @@ function evaluateExpression() {
         case "/":
             if (right === 0) {
                 expressionObj.result = "Don't div by 0!";
-                // divError prevents error text from being copied to l_operand after eval
+                // divError prevents error text from being copied to l_operand after evaluation
                 divError = true;
             }
             else expressionObj.result = left / right;
@@ -112,9 +127,12 @@ function evaluateExpression() {
     results.textContent = expressionObj.result;
     if (!divError) {
         resetExpression();
+        // convert back to string for display purposes after evaluating
         expressionObj.l_operand = expressionObj.result.toString();
         expressionObj.active = "l";
     }
+    // if there was a divide by 0 error, don't actually do anything except reset the flag, so user can 
+    // edit their expression
     else divError = false;
 }
 
@@ -143,7 +161,6 @@ function deleteLast() {
         case "r":
             expressionObj.r_operand = expressionObj.r_operand.slice(0, -1);
             if (!expressionObj.r_operand) expressionObj.active = "o";
-
             break;        
     
         default:
