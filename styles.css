@@ -58,7 +58,7 @@ body {
 
 #display .input {
     height: 25px;
-    margin: 10px;
+    margin: 5px;
     color:darkslateblue;
     font-size: 1.25em;
 }
@@ -107,4 +107,12 @@ button:active {
 button:hover {
     background-color: black;
     color: white;
+}
+
+.numeric {
+    background-color: lightyellow;
+}
+
+.special {
+    background-color:aliceblue;
 }

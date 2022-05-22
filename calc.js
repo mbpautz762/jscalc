@@ -5,7 +5,8 @@ results.textContent = "";
 let input = document.querySelector("#display .input");
 input.textContent = "0";
 
-let buttons = createButtons();
+const buttons = createButtons();
+const maxDigits = 16;
 
 // the calc stores everything it needs in the expression object as opposed to simply converting a full string of 
 // input.  This is done in order to allow auto evaluation when the user inputs a chain of commands.  It's a clunky way to
@@ -94,14 +95,14 @@ function createButtons() {
 }
 
 function evaluateExpression() {
-    // first, convert everything to actual numbers, checking if there is a decimal in there
+    // check for incomplete expressions
+    if (!(expressionObj.l_operand) || !(expressionObj.operator) || !(expressionObj.r_operand)) return;
 
+    // first, convert everything to actual numbers, checking if there is a decimal in there
     let left = expressionObj.l_operand.includes(".") ? parseFloat(expressionObj.l_operand) : parseInt(expressionObj.l_operand);
     let right = expressionObj.r_operand.includes(".") ? parseFloat(expressionObj.r_operand) : parseInt(expressionObj.r_operand);
     console.log(`Left: ${left}.  Right: ${right}`);
 
-    // let left = parseInt(expressionObj.l_operand);
-    // let right = parseInt(expressionObj.r_operand);
     let divError = false;
     switch (expressionObj.operator) {
         case "+":
@@ -137,7 +138,7 @@ function evaluateExpression() {
 }
 
 function resetExpression() {
-    expressionObj.l_operand = "";
+    expressionObj.l_operand = "0";
     expressionObj.r_operand = "";
     expressionObj.operator = "";
     expressionObj.active = "none";
