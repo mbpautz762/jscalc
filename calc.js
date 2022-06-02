@@ -6,7 +6,6 @@ let input = document.querySelector("#display .input");
 input.textContent = "0";
 
 const buttons = createButtons();
-const maxDigits = 16;
 
 // the calc stores everything it needs in the expression object as opposed to simply converting a full string of 
 // input.  This is done in order to allow auto evaluation when the user inputs a chain of commands.  It's a clunky way to
@@ -29,62 +28,13 @@ function createButtons() {
         element.addEventListener("click", (e) => {
             if (e.target.classList.contains("numeric")) {
                 // if there is no current left and/or operand, store it
-                if (!expressionObj.operator) {
-                    expressionObj.l_operand += e.target.id;
-                    expressionObj.active = "l";
-                }
-                else {
-                    expressionObj.r_operand += e.target.id;
-                    expressionObj.active = "r";
-                }
+                handleNumeric(e.target.id);
             }
             if (e.target.classList.contains("operator")) {
-                if (!expressionObj.operator) {
-                    expressionObj.operator = e.target.id;
-                }
-                else {
-                    // if user inputs new operator and there is already a right operand,
-                    // auto evaluate the expression and reset expression w/ result stored in l_operand
-                    if (expressionObj.active === "o") {
-                        expressionObj.operator = e.target.id;
-                    }
-                    
-                    else {
-                        evaluateExpression();
-                        expressionObj.operator = e.target.id;
-
-                    }
-                }
-                expressionObj.active = "o";
+                handleOperator(e.target.id);
             }
             if (e.target.classList.contains("special")) {
-                switch (e.target.id) {
-                    case "c":
-                        resetExpression();
-                        break;
-                    case "ce":
-                        resetExpression();
-                        expressionObj.result = "";
-                        break;
-                    case "del":
-                        deleteLast();
-                        break;
-                    case "enter":
-                        evaluateExpression();
-                        break;
-                    case ".":
-                        // only add the decimal if it doesn't already exist in the operand
-                        if (expressionObj.active === "l" && !(expressionObj.l_operand.includes("."))) {
-                            expressionObj.l_operand += e.target.id;
-                        }
-                        else if (expressionObj.active === "r" && !(expressionObj.r_operand.includes("."))) {
-                            expressionObj.r_operand += e.target.id;
-                        }
-                        break;
-                
-                    default:
-                        break;
-                }
+                handleSpecial(e.target.id)
             }
             // now set the content for the proper display(s)
             input.textContent = expressionObj.l_operand + " " + expressionObj.operator + " " + expressionObj.r_operand;
@@ -93,6 +43,71 @@ function createButtons() {
         });
     });
 }
+
+
+function handleNumeric(id) {
+    if (!expressionObj.operator) {
+        expressionObj.l_operand += id;
+        expressionObj.active = "l";
+    }
+    else {
+        expressionObj.r_operand += id;
+        expressionObj.active = "r";
+    }
+}
+
+
+function handleOperator(id) {
+    if (!expressionObj.operator) {
+        expressionObj.operator = id;
+    }
+    else {
+        // if user inputs new operator and there is already a right operand,
+        // auto evaluate the expression and reset expression w/ result stored in l_operand
+        if (expressionObj.active === "o") {
+            expressionObj.operator = id;
+        }
+        
+        else {
+            evaluateExpression();
+            expressionObj.operator = id;
+        }
+    }
+    expressionObj.active = "o";
+}
+
+function handleSpecial(id) {
+    switch (id) {
+        case "c":
+            resetExpression();
+            break;
+        case "ce":
+            resetExpression();
+            expressionObj.result = "";
+            break;
+        case "del":
+            deleteLast();
+            break;
+        case "enter":
+            evaluateExpression();
+            break;
+        case ".":
+            // only add the decimal if it doesn't already exist in the operand
+            if (expressionObj.active === "l" && !(expressionObj.l_operand.includes("."))) {
+                expressionObj.l_operand += id;
+            }
+            else if (expressionObj.active === "r" && !(expressionObj.r_operand.includes("."))) {
+                expressionObj.r_operand += id;
+            }
+            break;
+    
+        default:
+            break;
+    }
+    
+}
+
+
 
 function evaluateExpression() {
     // check for incomplete expressions
